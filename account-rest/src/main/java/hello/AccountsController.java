@@ -1,5 +1,6 @@
 package hello;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,23 +16,29 @@ public class AccountsController {
     private final AtomicLong counter = new AtomicLong();
     private AccountLogicFacade accountLogicFacade = new AccountLogicFacadeImpl();
 
-    @RequestMapping("/account/create")
-    public Account account(@RequestParam(value="accounttype") String accountType, 
+
+    public static final String ENDPOINT = "/account-rest";
+
+    @RequestMapping(ENDPOINT + "/account/create")
+    public String str(@RequestParam(value="accounttype") String accountType,
                             @RequestParam(value="person") String person,
                             @RequestParam(value="bank") String bank) {
-        return accountLogicFacade.createAccount(accountType, person, bank);
-                                // Anropa logiklagret och returnera OK eller FAILED 
+        String ret = accountLogicFacade.createAccount(accountType, person, bank);
+        //System.out.println(ret);
+        return ret;
+        // Anropa logiklagret och returnera OK eller FAILED
     }
 
-    /*
-    @RequestMapping("/account/find/person")
-    public Account account(@RequestParam(value="person") String person) {
+
+    @RequestMapping(ENDPOINT + "/account/find/person")
+    public List account(@RequestParam(value="person") String person) {
         // Anropa logiklagret och returnera en lista på alla konton personen har i JSON
         // Om inga konton hittas, returnera tom lista
-        return new Account(counter.incrementAndGet(),
-                            String.format(template, person));
+        List ret = accountLogicFacade.findPerson(person);
+        System.out.println(ret);
+        return ret;
     }
-
+    /*
     @RequestMapping("/account/debit")
     public Account account(@RequestParam(value="id") int id, @RequestParam(value="amount") int amount) {
         return new Account(counter.incrementAndGet(),

@@ -2,7 +2,6 @@ package se.liu.ida.tdp024.account.logic.test.facade;
 
 import org.junit.After;
 import org.junit.Test;
-import org.junit.Assert.assertEquals;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
 
