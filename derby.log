@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Sep 28 11:56:01 CEST 2020:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0174-d423-f891-0000131f9340 
+Mon Sep 28 14:47:52 CEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0174-d4c1-4d55-00001290f580 
 on database directory memory:/home/moe/TDP024/tdp024-lab3-soa/dataPU_embedded with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@3d4eac69 
 Loaded from file:/home/moe/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
 java.vendor=Ubuntu

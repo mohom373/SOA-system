@@ -26,11 +26,6 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
         this.accountEntityFacade = accountEntityFacade;
     }
 
-    /*
-    public AccountLogicFacadeImpl() {
-
-    }*/
-
     public String createAccount(String accountType, String person, String bank) {
         if (accountType.equalsIgnoreCase("Savings") || accountType.equalsIgnoreCase("Check")) {
 
@@ -42,17 +37,10 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
                 bankResponse = httpHelper.get(BANKENDPOINT + "bank/find",
                         "name", bank);
 
-                System.out.println(personResponse);
-                System.out.println(bankResponse);
                 if (!bankResponse.equals("null")) {
-                    // TODO: Anropa en funktion från datalayer för att spara responsen.
-                    //accountEntityFacade.create(accountType, person, bank);
-                    System.out.println(" This is person " + person);
+
                     accountEntityFacade.create(accountType, person, bankResponse);
-                    //System.out.println(accountEntityFacade.findByPerson(person).getBankKey());
-                    System.out.println(accountEntityFacade.findByPerson(person).getPersonKey());
-                    System.out.println(accountEntityFacade.findByPerson(person).getAccountType());
-                    System.out.println(accountEntityFacade.findByPerson(person).getId());
+
                     return OK;
                 } else {
                     return FAIL;
@@ -71,7 +59,9 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
                 "key", person);
         if (!personResponse.equals("null")) {
             // TODO: Hämta alla konton från databasen
-            return new ArrayList();
+            List<Account> listOfAccounts = accountEntityFacade.findByPerson(person);
+            System.out.println(listOfAccounts);
+            return listOfAccounts;
         } else {
             return new ArrayList();
         }

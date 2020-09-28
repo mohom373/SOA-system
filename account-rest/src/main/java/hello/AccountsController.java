@@ -26,18 +26,13 @@ public class AccountsController {
                             @RequestParam(value="bank") String bank) {
         String ret = accountLogicFacade.createAccount(accountType, person, bank);
 
-        //System.out.println(ret);
         return ret;
-        // Anropa logiklagret och returnera OK eller FAILED
     }
 
 
     @RequestMapping(ENDPOINT + "/account/find/person")
     public List account(@RequestParam(value="person") String person) {
-        // Anropa logiklagret och returnera en lista på alla konton personen har i JSON
-        // Om inga konton hittas, returnera tom lista
         List ret = accountLogicFacade.findPerson(person);
-        System.out.println(ret);
         return ret;
     }
     /*
