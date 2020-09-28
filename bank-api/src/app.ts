@@ -26,7 +26,8 @@ app.get('/bank/find', (req: Request, res: Response) => {
         // Iterate over map values
         for (let [key, value] of banks.entries()) {
             if (value.toLowerCase() === req.query.name.toString().toLowerCase()) {
-                res.status(200).send({key, value});   
+                //res.status(200).send({key, value});
+                res.status(200).send(key);
                 foundValue = true;
             }
         }

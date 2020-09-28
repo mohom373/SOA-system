@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
 import se.liu.ida.tdp024.account.logic.impl.facade.AccountLogicFacadeImpl;
 
@@ -14,7 +15,7 @@ public class AccountsController {
 
     private static final String template = "Hello, %s";
     private final AtomicLong counter = new AtomicLong();
-    private AccountLogicFacade accountLogicFacade = new AccountLogicFacadeImpl();
+    private AccountLogicFacade accountLogicFacade = new AccountLogicFacadeImpl(new AccountEntityFacadeDB());
 
 
     public static final String ENDPOINT = "/account-rest";
@@ -24,6 +25,7 @@ public class AccountsController {
                             @RequestParam(value="person") String person,
                             @RequestParam(value="bank") String bank) {
         String ret = accountLogicFacade.createAccount(accountType, person, bank);
+
         //System.out.println(ret);
         return ret;
         // Anropa logiklagret och returnera OK eller FAILED
