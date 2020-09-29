@@ -19,7 +19,6 @@ public class AccountDB implements Account {
 
     private String accountType;
 
-    @Version
     private int holdings = 0;
 
     @Override

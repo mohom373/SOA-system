@@ -39,9 +39,11 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
 
                 if (!bankResponse.equals("null")) {
 
-                    accountEntityFacade.create(accountType, person, bankResponse);
-
-                    return OK;
+                    if (accountEntityFacade.create(accountType, person, bankResponse) == "OK") {
+                        return OK;
+                    } else {
+                        return FAIL;
+                    }
                 } else {
                     return FAIL;
                 }

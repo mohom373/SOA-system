@@ -96,7 +96,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             em.getTransaction().begin();
 
 
-            Account account = em.find(AccountDB.class, id, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            Account account = em.find(AccountDB.class, id);
 
             int holdings = account.getHoldings();
 

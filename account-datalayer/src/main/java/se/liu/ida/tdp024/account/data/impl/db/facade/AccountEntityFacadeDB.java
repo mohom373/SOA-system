@@ -13,7 +13,7 @@ import java.util.List;
 public class AccountEntityFacadeDB implements AccountEntityFacade {
 
     @Override
-    public void create(String accountType, String person, String bank) {
+    public String create(String accountType, String person, String bank) {
         EntityManager em = EMF.getEntityManager();
         try {
             em.getTransaction().begin();
@@ -25,9 +25,9 @@ public class AccountEntityFacadeDB implements AccountEntityFacade {
 
             em.persist(acc);
             em.getTransaction().commit();
-
+            return "OK";
         } catch (Exception e) {
-
+            return null;
         } finally {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
