@@ -10,10 +10,4 @@ public interface AccountLogicFacade {
     public String createAccount(String accountType, String person, String bank);
     
     public List findPerson(String person);
-
-    public String debitAccount(int id, int amount);
-
-    public String creditAccount(int id, int amount);
-
-    public List getTransactions(int id);
 }

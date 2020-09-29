@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Mon Sep 28 14:47:52 CEST 2020:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0174-d4c1-4d55-00001290f580 
-on database directory memory:/home/moe/TDP024/tdp024-lab3-soa/dataPU_embedded with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@3d4eac69 
-Loaded from file:/home/moe/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
-java.vendor=Ubuntu
-java.runtime.version=11.0.8+10-post-Ubuntu-0ubuntu118.04.1
-user.dir=/home/moe/TDP024/tdp024-lab3-soa
+Tue Sep 29 11:49:47 CEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0174-d944-a134-000004600388 
+on database directory memory:/home/clara/IP/tdp024-lab3-soa/dataPU_embedded with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@659e0bfd 
+Loaded from file:/home/clara/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=15+36-1562
+user.dir=/home/clara/IP/tdp024-lab3-soa
 os.name=Linux
 os.arch=amd64
 os.version=5.4.0-47-generic

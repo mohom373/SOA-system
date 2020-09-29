@@ -58,36 +58,11 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
         String personResponse = httpHelper.get(PERSONENDPOINT + "person/find",
                 "key", person);
         if (!personResponse.equals("null")) {
-            // TODO: Hämta alla konton från databasen
             List<Account> listOfAccounts = accountEntityFacade.findByPerson(person);
-            System.out.println(listOfAccounts);
             return listOfAccounts;
         } else {
             return new ArrayList();
         }
     }
-
-    public String debitAccount(int id, int amount) {
-        if (amount < 0) {
-            return FAIL;
-        } else {
-            // TODO: Kolla upp id i databasen.
-        }
-        return new String();
-    }
-
-    public String creditAccount(int id, int amount) {
-        if (amount < 0) {
-            return FAIL;
-        } else {
-            // TODO: Kolla upp id i databasen.
-        }
-        return new String();
-    }
-
-    public List getTransactions(int id) {
-        return new ArrayList();
-    }
-
 
 }

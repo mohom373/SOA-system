@@ -8,6 +8,8 @@ import se.liu.ida.tdp024.account.data.impl.db.entity.TransactionDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
 
@@ -40,10 +42,10 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
     }
 
     @Override
-    public void debit(long id, int amount) {
+    public String debit(long id, int amount) {
         EntityManager em = EMF.getEntityManager();
 
-        if (amount < 0) return;
+        if (amount < 0) return "FAILED";
 
         String status;
         String type = "DEBIT";
@@ -60,16 +62,17 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
                 status = "OK";
             } else {
                 status = "FAILED";
+
             }
 
             createTransaction(type, amount, created, status, account);
             em.merge(account);
 
             em.getTransaction().commit();
-
+            return status;
         } catch (Exception e) {
 
-            return;
+            return null;
 
         } finally {
 
@@ -81,12 +84,59 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
     }
 
     @Override
-    public void credit(long id, int amount) {
+    public String credit(long id, int amount) {
+        EntityManager em = EMF.getEntityManager();
 
+        if (amount < 0) return "FAILED";
+
+        String type = "CREDIT";
+        Date created = new Date();
+        try {
+
+            em.getTransaction().begin();
+
+
+            Account account = em.find(AccountDB.class, id, LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+
+            int holdings = account.getHoldings();
+
+            account.setHoldings((holdings+amount));
+
+            createTransaction(type, amount, created, "OK", account);
+            em.merge(account);
+
+            em.getTransaction().commit();
+            return "OK";
+        } catch (Exception e) {
+
+            return null;
+
+        } finally {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
     }
 
     @Override
-    public List<Transaction> getTransactions(long id) {
-        return null;
+    public List<Transaction> getTransactions(long accountId) {
+        EntityManager em = EMF.getEntityManager();
+
+        try {
+            Query query = em.createQuery("SELECT a FROM TransactionDB a WHERE a.account.id = :key ");
+            query.setParameter("key", accountId);
+
+            return (List<Transaction>) query.getResultList();
+
+        } catch (IllegalArgumentException e) {
+            return null;
+
+        } finally {
+
+            em.close();
+
+        }
     }
 }

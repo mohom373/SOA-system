@@ -9,8 +9,8 @@ import java.util.List;
 public interface TransactionEntityFacade {
     public void createTransaction(String type, int amount, Date created, String status, Account account);
 
-    public void debit(long id, int amount);
-    public void credit(long id, int amount);
+    public String debit(long id, int amount);
+    public String credit(long id, int amount);
 
-    public List<Transaction> getTransactions(long id);
+    public List getTransactions(long id);
 }

@@ -5,6 +5,7 @@ import se.liu.ida.tdp024.account.data.api.entity.Account;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Version;
 
 @Entity
 public class AccountDB implements Account {
@@ -18,6 +19,7 @@ public class AccountDB implements Account {
 
     private String accountType;
 
+    @Version
     private int holdings = 0;
 
     @Override
