@@ -1,6 +1,7 @@
 package se.liu.ida.tdp024.account.logic.test.facade;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
@@ -30,6 +31,32 @@ public class AccountLogicFacadeTest {
         - Om person eller bank fattas i api:er, ska FAILED returneras
         - Ev. kolla om accounttype är något annat än CHECK eller SAVINGS?
       */
+        /*
+        String accountType1 = "CHECK";
+        String accountType2 = "SAVINGS";
+        String accountType3 = "RANDOM";
+        String person1 = "1";
+        String person2 = "10";
+        String bank1 = "Nordea";
+        String bank2 = "SWEDBANK";
+        String bank3 = "SEB";
+
+        String res = accountLogicFacade.createAccount(accountType1, person1, bank1);
+        Assert.assertEquals("OK", res);
+
+        String res2 = accountLogicFacade.createAccount(accountType2, person1, bank2);
+        Assert.assertEquals("OK", res2);
+
+        String res3 = accountLogicFacade.createAccount(accountType3, person1, bank1);
+        Assert.assertEquals("FAILED", res3);
+
+        String res4 = accountLogicFacade.createAccount(accountType1, person2, bank1);
+        Assert.assertEquals("FAILED", res4);
+
+        String res5 = accountLogicFacade.createAccount(accountType1, person1, bank3);
+        Assert.assertEquals("FAILED", res5);
+
+         */
     }
 
     @Test

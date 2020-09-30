@@ -6,55 +6,62 @@ import org.junit.Assert;
 import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
+import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
+import se.liu.ida.tdp024.account.data.impl.db.util.StorageFacadeDB;
+import se.liu.ida.tdp024.account.util.json.AccountJsonSerializer;
+import se.liu.ida.tdp024.account.util.json.AccountJsonSerializerImpl;
+import se.liu.ida.tdp024.account.xfinal.test.util.AccountDTO;
+
 
 import java.util.List;
 
 public class AccountEntityFacadeTest {
     
     //---- Unit under test ----//
-    private AccountEntityFacade accountEntityFacade;
-    private StorageFacade storageFacade;
-    
+    private AccountEntityFacade accountEntityFacade = new AccountEntityFacadeDB();
+    private StorageFacade storageFacade = new StorageFacadeDB();
+    private static final AccountJsonSerializer jsonSerializer = new AccountJsonSerializerImpl();
+
     @After
     public void tearDown() {
-       // storageFacade.emptyStorage();
+        storageFacade.emptyStorage();
     }
     
     @Test
     public void testCreate() {
-        String accountType1 = "CHECK";
-        String accountType2 = "SAVINGS";
-        String accountType3 = "RANDOM";
-        String person1 = "1";
-        String person2 = "10";
-        String bank1 = "Nordea";
-        String bank2 = "SWEDBANK";
-        String bank3 = "SEB";
 
-        String res = accountEntityFacade.create(accountType1, person1, bank1);
+        String accountType = "CHECK";
+        String person = "1";
+        String bank = "Nordea";
+        String res = accountEntityFacade.create(accountType, person, bank);
         Assert.assertEquals("OK", res);
-
-        String res2 = accountEntityFacade.create(accountType2, person1, bank2);
-        Assert.assertEquals("OK", res2);
-
-        String res3 = accountEntityFacade.create(accountType3, person1, bank1);
-        Assert.assertEquals("FAILED", res3);
-
-        String res4 = accountEntityFacade.create(accountType1, person2, bank1);
-        Assert.assertEquals("FAILED", res4);
-
-        String res5 = accountEntityFacade.create(accountType1, person1, bank3);
-        Assert.assertEquals("FAILED", res5);
     }
-/*
+
     @Test
     public void testFind() {
+        accountEntityFacade.create("CHECK", "1", "SWEDBANK");
+        accountEntityFacade.create("SAVINGS", "3", "NORDEA");
+        accountEntityFacade.create("CHECK", "3", "SWEDBANK");
+
         String person1 = "1";
         String person2 = "2";
+        String person3 = "3";
 
-        String jsonString = "[{'id': 1, 'personKey': '1', 'accountType': 'CHECK', 'bankKey': '', 'holdings': 0}]";
+        //String jsonString = "[{'id': 1, 'personKey': '1', 'accountType': 'CHECK', 'bankKey': '1', 'holdings': 0}]";
 
         List<Account> res1 = accountEntityFacade.findByPerson(person1);
-        Assert.assertEquals(list1, res1);
-    }*/
+        AccountDTO[] accountDTos = jsonSerializer.fromJson(res1, AccountDTO[].class);
+
+        Assert.assertEquals(1, accountDTos.length);
+
+        List<Account> res2 = accountEntityFacade.findByPerson(person2);
+        AccountDTO[] accountDTos2 = jsonSerializer.fromJson(res2, AccountDTO[].class);
+
+        Assert.assertEquals(0, accountDTos2.length);
+
+        List<Account> res3 = accountEntityFacade.findByPerson(person3);
+        AccountDTO[] accountDTos3 = jsonSerializer.fromJson(res3, AccountDTO[].class);
+
+        Assert.assertEquals(2, accountDTos3.length);
+    }
 }
