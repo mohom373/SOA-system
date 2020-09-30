@@ -8,10 +8,6 @@ import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.StorageFacadeDB;
-import se.liu.ida.tdp024.account.util.json.AccountJsonSerializer;
-import se.liu.ida.tdp024.account.util.json.AccountJsonSerializerImpl;
-import se.liu.ida.tdp024.account.xfinal.test.util.AccountDTO;
-
 
 import java.util.List;
 
@@ -20,7 +16,6 @@ public class AccountEntityFacadeTest {
     //---- Unit under test ----//
     private AccountEntityFacade accountEntityFacade = new AccountEntityFacadeDB();
     private StorageFacade storageFacade = new StorageFacadeDB();
-    private static final AccountJsonSerializer jsonSerializer = new AccountJsonSerializerImpl();
 
     @After
     public void tearDown() {
@@ -29,11 +24,11 @@ public class AccountEntityFacadeTest {
     
     @Test
     public void testCreate() {
-
         String accountType = "CHECK";
         String person = "1";
         String bank = "Nordea";
         String res = accountEntityFacade.create(accountType, person, bank);
+
         Assert.assertEquals("OK", res);
     }
 
@@ -47,21 +42,13 @@ public class AccountEntityFacadeTest {
         String person2 = "2";
         String person3 = "3";
 
-        //String jsonString = "[{'id': 1, 'personKey': '1', 'accountType': 'CHECK', 'bankKey': '1', 'holdings': 0}]";
-
         List<Account> res1 = accountEntityFacade.findByPerson(person1);
-        AccountDTO[] accountDTos = jsonSerializer.fromJson(res1, AccountDTO[].class);
-
-        Assert.assertEquals(1, accountDTos.length);
+        Assert.assertEquals(1, res1.size());
 
         List<Account> res2 = accountEntityFacade.findByPerson(person2);
-        AccountDTO[] accountDTos2 = jsonSerializer.fromJson(res2, AccountDTO[].class);
-
-        Assert.assertEquals(0, accountDTos2.length);
+        Assert.assertEquals(0, res2.size());
 
         List<Account> res3 = accountEntityFacade.findByPerson(person3);
-        AccountDTO[] accountDTos3 = jsonSerializer.fromJson(res3, AccountDTO[].class);
-
-        Assert.assertEquals(2, accountDTos3.length);
+        Assert.assertEquals(2, res3.size());
     }
 }

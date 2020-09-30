@@ -3,13 +3,17 @@ package se.liu.ida.tdp024.account.logic.test.facade;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
+import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
+import se.liu.ida.tdp024.account.logic.impl.facade.AccountLogicFacadeImpl;
 
 public class AccountLogicFacadeTest {
 
     //--- Unit under test ---//
-    public AccountLogicFacade accountLogicFacade;
+    AccountEntityFacade accountEntityFacade = new AccountEntityFacadeDB();
+    public AccountLogicFacade accountLogicFacade = new AccountLogicFacadeImpl(accountEntityFacade);
     public StorageFacade storageFacade;
 
     public void setUp() {
@@ -24,14 +28,7 @@ public class AccountLogicFacadeTest {
 
     @Test
     public void testCreate() {
-      //accountLogicFacade.createAccount(accounttype, )
-      /*
-        Ska testa:
-        - Om personen och banken finns i api:er, ska OK returneras "createAccount()"
-        - Om person eller bank fattas i api:er, ska FAILED returneras
-        - Ev. kolla om accounttype är något annat än CHECK eller SAVINGS?
-      */
-        /*
+
         String accountType1 = "CHECK";
         String accountType2 = "SAVINGS";
         String accountType3 = "RANDOM";
@@ -55,8 +52,6 @@ public class AccountLogicFacadeTest {
 
         String res5 = accountLogicFacade.createAccount(accountType1, person1, bank3);
         Assert.assertEquals("FAILED", res5);
-
-         */
     }
 
     @Test
@@ -69,32 +64,4 @@ public class AccountLogicFacadeTest {
       */
     }
 
-    @Test
-    public void testDebit() { // När ska detta faila??
-      /*
-        Ska testa:
-        - Om id inte finns bland konton, returnera FAILED
-        - Ev. Om id finns bland konton men summan överstiger beloppet som finns på kontot, returnera FAILED??
-        - Om id finns och summan går att debitera, returnera OK och kolla om summan dragits rätt
-      */
-    }
-
-    @Test
-    public void testCredit() { 
-      /*
-        Ska testa: 
-        - Om inte id finns bland konton, returnera FAILED
-        - Om id finns, returnera OK och kolla om summan adderats rätt
-      */
-    }
-    
-    @Test 
-    public void testTransactions() {
-      /*
-       Ska testa:
-       - Om inte id finns bland konton returnera []
-       - Om id finns men listan av transaktioner inte är tom returnera hela listan som JSON object
-       - Om id finns men listan är tom returnera []
-       */
-    }
  }

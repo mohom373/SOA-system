@@ -9,6 +9,7 @@ import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+import javax.persistence.LockTimeoutException;
 import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
@@ -16,11 +17,8 @@ import java.util.List;
 public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
     @Override
-    public void createTransaction(String type, int amount, Date created, String status, Account account) {
-        EntityManager em = EMF.getEntityManager();
+    public void createTransaction(String type, int amount, Date created, String status, Account account, EntityManager em) {
         try {
-            em.getTransaction().begin();
-
             Transaction transaction = new TransactionDB();
             transaction.setAccount(account);
             transaction.setAmount(amount);
@@ -29,15 +27,8 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             transaction.setType(type);
 
             em.persist(transaction);
-            em.getTransaction().commit();
-
         } catch (Exception e) {
 
-        } finally {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            em.close();
         }
     }
 
@@ -55,7 +46,10 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             em.getTransaction().begin();
 
 
-            Account account = em.find(AccountDB.class, id);
+            Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
+            if (account == null) {
+                return "FAILED";
+            }
             int holdings = account.getHoldings();
             if (holdings >= amount) {
                 account.setHoldings((holdings-amount));
@@ -65,7 +59,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
             }
 
-            createTransaction(type, amount, created, status, account);
+            createTransaction(type, amount, created, status, account, em);
             em.merge(account);
 
             em.getTransaction().commit();
@@ -95,20 +89,22 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
             em.getTransaction().begin();
 
-
-            Account account = em.find(AccountDB.class, id);
-
+            //Account account = em.find(AccountDB.class, id);
+            Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
+            if (account == null) {
+                return "FAILED";
+            }
             int holdings = account.getHoldings();
 
             account.setHoldings((holdings+amount));
 
-            createTransaction(type, amount, created, "OK", account);
+            createTransaction(type, amount, created, "OK", account, em);
             em.merge(account);
 
             em.getTransaction().commit();
             return "OK";
-        } catch (Exception e) {
-
+        } catch (LockTimeoutException e) {
+            System.out.println(e);
             return null;
 
         } finally {
