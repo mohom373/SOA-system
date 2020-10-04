@@ -89,7 +89,6 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
             em.getTransaction().begin();
 
-            //Account account = em.find(AccountDB.class, id);
             Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
             if (account == null) {
                 return "FAILED";

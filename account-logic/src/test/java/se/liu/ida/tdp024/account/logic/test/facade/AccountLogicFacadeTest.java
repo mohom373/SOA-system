@@ -3,11 +3,14 @@ package se.liu.ida.tdp024.account.logic.test.facade;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
 import se.liu.ida.tdp024.account.logic.impl.facade.AccountLogicFacadeImpl;
+
+import java.util.List;
 
 public class AccountLogicFacadeTest {
 
@@ -56,12 +59,22 @@ public class AccountLogicFacadeTest {
 
     @Test
     public void testFind() {
-      /*
-        Ska testa:
-        - Ska kolla om personen finns i api, om den inte finns returnera []
-        - Om personen finns, ska alla konton från personen hämtas och returneras i en lista
-        - Om personen finns, men inga konton finns, returnera en tom lista
-      */
+        accountLogicFacade.createAccount("CHECK", "1", "NORDEA");
+        accountLogicFacade.createAccount("CHECK", "2", "SWEDBANK");
+        accountLogicFacade.createAccount("SAVINGS", "2", "NORDEA");
+
+        String person1 = "1";
+        String person2 = "2";
+        String person3 = "3";
+
+        List<Account> res1 = accountLogicFacade.findPerson(person1);
+        Assert.assertEquals(1, res1.size());
+
+        List<Account> res2 = accountLogicFacade.findPerson(person2);
+        Assert.assertEquals(2, res2.size());
+
+        List<Account> res3 = accountLogicFacade.findPerson(person3);
+        Assert.assertEquals(0, res3.size());
     }
 
  }

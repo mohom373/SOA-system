@@ -19,17 +19,22 @@ public class AccountsController {
     public static final String ENDPOINT = "/account-rest";
 
     @RequestMapping(ENDPOINT + "/account/create")
-    public String create(@RequestParam(value="accounttype") String accountType,
-                            @RequestParam(value="person") String person,
-                            @RequestParam(value="bank") String bank) {
-        String ret = accountLogicFacade.createAccount(accountType, person, bank);
+    public String create(@RequestParam(value="accounttype", required = false) String accountType,
+                            @RequestParam(value="person", required = false) String person,
+                            @RequestParam(value="bank", required = false) String bank) {
+        if (accountType == null || person == null || bank == null) {
+            return "FAILED";
+        } else {
+            String ret = accountLogicFacade.createAccount(accountType, person, bank);
 
-        return ret;
+            return ret;
+        }
+
     }
 
 
     @RequestMapping(ENDPOINT + "/account/find/person")
-    public List findPerson(@RequestParam(value="person") String person) {
+    public List findPerson(@RequestParam(value="person", required = false) String person) {
         List ret = accountLogicFacade.findPerson(person);
         return ret;
     }
