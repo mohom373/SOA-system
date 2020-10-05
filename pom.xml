@@ -7,8 +7,53 @@
     <packaging>pom</packaging>
     <modules>
         <module>account-xfinal-test</module>
-      <module>account-datalayer</module>
-      <module>account-logic</module>
-      <module>account-rest</module>
- </modules>
+        <module>account-datalayer</module>
+        <module>account-logic</module>
+        <module>account-rest</module>
+    </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>@project.groupId@</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>@project.version@</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            se/liu/ida/tdp024/account/logic/http/**/*.class
+                        </exclude>
+                        <exclude>
+                            se/liu/ida/tdp024/account/logic/logger/**/*.class
+                        </exclude>
+                        <exclude>
+                            se/liu/ida/tdp024/account/data/impl/db/util/**/*.class
+                        </exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
