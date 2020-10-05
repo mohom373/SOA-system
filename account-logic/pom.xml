@@ -21,12 +21,6 @@
           <groupId>tdp024</groupId>
           <artifactId>datalayer</artifactId>
           <version>${project.version}</version>
-    </dependency>
-        <dependency>
-            <groupId>tdp024</groupId>
-            <artifactId>xfinal-test</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
     <properties>

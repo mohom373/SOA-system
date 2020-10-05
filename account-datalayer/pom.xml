@@ -35,18 +35,6 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>tdp024</groupId>
-            <artifactId>xfinal-test</artifactId>
-            <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>tdp024</groupId>
-            <artifactId>xfinal-test</artifactId>
-            <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
     <properties>

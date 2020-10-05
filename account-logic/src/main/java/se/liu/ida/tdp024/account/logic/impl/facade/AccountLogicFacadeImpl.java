@@ -3,8 +3,8 @@ package se.liu.ida.tdp024.account.logic.impl.facade;
 import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
-import se.liu.ida.tdp024.account.util.http.HTTPHelperImpl;
-import se.liu.ida.tdp024.account.util.http.HTTPHelper;
+import se.liu.ida.tdp024.account.logic.http.HTTPHelper;
+import se.liu.ida.tdp024.account.logic.http.HTTPHelperImpl;
 
 import java.util.ArrayList;
 import java.util.List;
