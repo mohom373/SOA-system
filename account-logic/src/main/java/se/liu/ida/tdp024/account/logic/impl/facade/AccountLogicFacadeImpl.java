@@ -2,6 +2,7 @@ package se.liu.ida.tdp024.account.logic.impl.facade;
 
 import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
+import se.liu.ida.tdp024.account.logging.KafkaLogging;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
 import se.liu.ida.tdp024.account.logic.http.HTTPHelper;
 import se.liu.ida.tdp024.account.logic.http.HTTPHelperImpl;
@@ -12,9 +13,8 @@ import java.util.List;
 public class AccountLogicFacadeImpl implements AccountLogicFacade {
     
     private AccountEntityFacade accountEntityFacade;
-
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
     private static final HTTPHelper httpHelper = new HTTPHelperImpl();
-
     public static final String PERSONENDPOINT = "http://localhost:8060/";
     public static final String BANKENDPOINT = "http://localhost:8070/";
 
@@ -31,6 +31,7 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
 
             String personResponse = httpHelper.get(PERSONENDPOINT + "person/find",
                     "key", person);
+            kafkaLogging.sendToKafka("access-events", personResponse);
             String bankResponse;
 
             if (!personResponse.equals("null")) {

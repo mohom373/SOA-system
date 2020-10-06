@@ -1,8 +1,21 @@
 // This is the bank api 
 import express, { Request, Response} from 'express';
 import {TSMap} from 'typescript-map';
+import kafka, {KafkaClient} from 'kafka-node';
 
 const app = express();
+const client = new kafka.KafkaClient({kafkaHost: '127.0.0.1:9092'});
+ 
+let Producer = kafka.Producer;
+let producer = new Producer(client);
+
+let payloads = [
+    { topic: 'access-events', messages: 'hi', partition: 0 },
+    { topic: 'error-events', messages: ['hello', 'world'] }
+];
+
+
+producer.on('error', function (err) {})
 
 let banks = new TSMap([["1", "SWEDBANK"], ["2", "IKANOBANKEN"], ["3", "JPMORGAN"], 
     ["4", "NORDEA"], ["5", "CITIBANK"], ["6", "HANDELSBANKEN"], ["7", "SBAB"],
@@ -16,6 +29,11 @@ app.get('/bank', (req: Request, res: Response) => {
 
 // Should return all persons
 app.get('/bank/list', (req: Request, res: Response) => {  
+    producer.on('ready', function () {
+        producer.send(payloads, function (err, data) {
+            console.log(data);
+        });
+    });
     res.status(200).send(banks.toJSON());
 });
 

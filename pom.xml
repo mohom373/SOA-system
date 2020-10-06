@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>account-xfinal-test</module>
+        <module>logging</module>
         <module>account-datalayer</module>
         <module>account-logic</module>
         <module>account-rest</module>
