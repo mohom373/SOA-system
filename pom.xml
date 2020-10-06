@@ -37,6 +37,9 @@
                         <exclude>
                             se/liu/ida/tdp024/account/data/impl/db/util/**/*.class
                         </exclude>
+                        <exclude>
+                            se/liu/ida/tdp024/account/rest/hello/**/Application.class
+                        </exclude>
                     </excludes>
                 </configuration>
                 <executions>

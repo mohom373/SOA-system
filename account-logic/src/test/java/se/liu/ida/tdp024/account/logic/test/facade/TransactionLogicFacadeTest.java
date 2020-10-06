@@ -54,6 +54,9 @@ public class TransactionLogicFacadeTest {
 
         String res4 = transactionLogicFacade.debitAccount(id2, amount2);
         Assert.assertEquals("FAILED", res4);
+
+        String res5 = transactionLogicFacade.debitAccount(10, amount2);
+        Assert.assertEquals("FAILED", res5);
     }
 
     @Test
@@ -73,6 +76,9 @@ public class TransactionLogicFacadeTest {
 
         String res3 = transactionLogicFacade.debitAccount(id2, amount2);
         Assert.assertEquals("FAILED", res3);
+
+        String res4 = transactionLogicFacade.debitAccount(10, amount2);
+        Assert.assertEquals("FAILED", res4);
     }
 
     @Test
@@ -91,5 +97,8 @@ public class TransactionLogicFacadeTest {
 
         List<Transaction> res3 = transactionEntityFacade.getTransactions(3);
         Assert.assertEquals(0, res3.size());
+
+        List<Transaction> res4 = transactionEntityFacade.getTransactions(10);
+        Assert.assertEquals(0, res4.size());
     }
 }

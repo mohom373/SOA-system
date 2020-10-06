@@ -19,13 +19,13 @@ public class TransactionController {
 
 
     @RequestMapping(ENDPOINT + "/account/debit")
-    public String debit(@RequestParam(value="id") int id, @RequestParam(value="amount") int amount) {
+    public String debit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
         String ret = transactionLogicFacade.debitAccount(id, amount);
         return ret;
     }
 
     @RequestMapping(ENDPOINT + "/account/credit")
-    public String credit(@RequestParam(value="id") int id, @RequestParam(value="amount") int amount) {
+    public String credit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
         String ret = transactionLogicFacade.creditAccount(id, amount);
         return ret;
     }

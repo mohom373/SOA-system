@@ -75,6 +75,9 @@ public class AccountLogicFacadeTest {
 
         List<Account> res3 = accountLogicFacade.findPerson(person3);
         Assert.assertEquals(0, res3.size());
+
+        List<Account> res4 = accountLogicFacade.findPerson("10");
+        Assert.assertEquals(0, res4.size());
     }
 
  }

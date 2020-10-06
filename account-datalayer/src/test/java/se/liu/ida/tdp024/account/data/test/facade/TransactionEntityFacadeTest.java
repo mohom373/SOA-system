@@ -65,6 +65,9 @@ public class TransactionEntityFacadeTest {
 
         String res3 = transactionEntityFacade.debit(id2, amount2);
         Assert.assertEquals("FAILED", res3);
+
+        String res4 = transactionEntityFacade.debit(10, amount2);
+        Assert.assertEquals("FAILED", res4);
     }
 
     @Test
