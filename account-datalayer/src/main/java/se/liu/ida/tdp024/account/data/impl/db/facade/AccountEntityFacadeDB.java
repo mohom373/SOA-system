@@ -5,6 +5,7 @@ import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.impl.db.entity.AccountDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
+import se.liu.ida.tdp024.account.logging.KafkaLogging;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -12,10 +13,13 @@ import java.util.List;
 
 public class AccountEntityFacadeDB implements AccountEntityFacade {
 
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
+
     @Override
     public String create(String accountType, String person, String bank) {
         EntityManager em = EMF.getEntityManager();
         try {
+            kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
 
             Account acc = new AccountDB();
@@ -24,17 +28,17 @@ public class AccountEntityFacadeDB implements AccountEntityFacade {
             acc.setAccountType(accountType);
 
             em.persist(acc);
+            kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             return "OK";
         } catch (Exception e) {
             return null;
         } finally {
             if (em.getTransaction().isActive()) {
+                kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
             em.close();
-
-
         }
     }
 

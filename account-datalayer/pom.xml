@@ -35,7 +35,11 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
-
+        <dependency>
+            <groupId>tdp024</groupId>
+            <artifactId>account-logging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

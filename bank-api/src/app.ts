@@ -8,11 +8,17 @@ const client = new kafka.KafkaClient({kafkaHost: '127.0.0.1:9092'});
  
 let Producer = kafka.Producer;
 let producer = new Producer(client);
+let channelAccess = "access-events";
+let channelError = "error-events";
 
-let payloads = [
-    { topic: 'access-events', messages: 'hi', partition: 0 },
-    { topic: 'error-events', messages: ['hello', 'world'] }
-];
+function log(channel: string, message: any) {
+    let payloads = [
+        { topic: channel, messages: message}
+    ]; 
+    producer.send(payloads, function (err, data) {
+        console.log(data);
+    });
+}
 
 
 producer.on('error', function (err) {})
@@ -22,46 +28,46 @@ let banks = new TSMap([["1", "SWEDBANK"], ["2", "IKANOBANKEN"], ["3", "JPMORGAN"
     ["8", "HSBC"], ["9", "NORDNET"]
 ]);
 
-// Endpoint for person api
+// Endpoint for bank api
 app.get('/bank', (req: Request, res: Response) => {
     res.status(200).send('Hello World');
 });
 
-// Should return all persons
-app.get('/bank/list', (req: Request, res: Response) => {  
-    producer.on('ready', function () {
-        producer.send(payloads, function (err, data) {
-            console.log(data);
-        });
-    });
+// Should return all banks
+app.get('/bank/list', (req: Request, res: Response) => { 
+    log(channelAccess, JSON.stringify(banks));
     res.status(200).send(banks.toJSON());
 });
 
-// Should return the person matching either name or key param
+// Should return the bank matching either name or key param
 app.get('/bank/find', (req: Request, res: Response) => {
     if (req.query.name !== undefined) {
         let foundValue = false;
         // Iterate over map values
         for (let [key, value] of banks.entries()) {
             if (value.toLowerCase() === req.query.name.toString().toLowerCase()) {
-                //res.status(200).send({key, value});
+                log(channelAccess, key);
                 res.status(200).send(key);
                 foundValue = true;
             }
         }
         if (!foundValue) {
+            log(channelError, "Value not found");
             res.status(200).send('null');
         }
     }
     else if (req.query.key !== undefined) {
         if (banks.has(req.query.key.toString())) {
             let bank = banks.get(req.query.key.toString());
+            log(channelAccess, bank);
             res.status(200).send(bank);
         } else {
+            log(channelError, "Key not found");
             res.status(200).send('null');
         }
     }
     else {
+        log(channelError, 404);
         res.status(404).send('404');  
     }
 });

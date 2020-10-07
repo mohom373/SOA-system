@@ -37,6 +37,7 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
             if (!personResponse.equals("null")) {
                 bankResponse = httpHelper.get(BANKENDPOINT + "bank/find",
                         "name", bank);
+                kafkaLogging.sendToKafka("access-events", bankResponse);
 
                 if (!bankResponse.equals("null")) {
                     accountEntityFacade.create(accountType, person, bankResponse);
@@ -57,6 +58,7 @@ public class AccountLogicFacadeImpl implements AccountLogicFacade {
     public List findPerson(String person) {
         String personResponse = httpHelper.get(PERSONENDPOINT + "person/find",
                 "key", person);
+        kafkaLogging.sendToKafka("access-events", personResponse);
         if (!personResponse.equals("null")) {
             List<Account> listOfAccounts = accountEntityFacade.findByPerson(person);
             return listOfAccounts;

@@ -6,6 +6,7 @@ import se.liu.ida.tdp024.account.data.api.facade.TransactionEntityFacade;
 import se.liu.ida.tdp024.account.data.impl.db.entity.AccountDB;
 import se.liu.ida.tdp024.account.data.impl.db.entity.TransactionDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
+import se.liu.ida.tdp024.account.logging.KafkaLogging;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 public class TransactionEntityFacadeDB implements TransactionEntityFacade {
+
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
 
     @Override
     public void createTransaction(String type, int amount, Date created, String status, Account account, EntityManager em) {
@@ -42,7 +45,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         String type = "DEBIT";
         Date created = new Date();
         try {
-
+            kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
 
 
@@ -61,7 +64,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
             createTransaction(type, amount, created, status, account, em);
             em.merge(account);
-
+            kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             return status;
         } catch (Exception e) {
@@ -71,6 +74,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         } finally {
 
             if (em.getTransaction().isActive()) {
+                kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
             em.close();
@@ -86,7 +90,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         String type = "CREDIT";
         Date created = new Date();
         try {
-
+            kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
 
             Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
@@ -99,7 +103,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
             createTransaction(type, amount, created, "OK", account, em);
             em.merge(account);
-
+            kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             return "OK";
         } catch (LockTimeoutException e) {
@@ -109,6 +113,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         } finally {
 
             if (em.getTransaction().isActive()) {
+                kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
             em.close();
