@@ -21,6 +21,7 @@ public class TransactionControllerTest {
             storageFacade.emptyStorage();
     }
 
+    /*
     @Test
     public void testDebit() {
         accountsController.create("CHECK", "1", "SWEDBANK");
@@ -80,4 +81,6 @@ public class TransactionControllerTest {
         List<Transaction> res3 = transactionController.transactions(6);
         Assert.assertEquals(0, res3.size());
     }
+
+     */
 }

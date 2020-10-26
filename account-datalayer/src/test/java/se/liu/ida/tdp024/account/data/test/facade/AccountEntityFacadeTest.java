@@ -21,7 +21,8 @@ public class AccountEntityFacadeTest {
     public void tearDown() {
         storageFacade.emptyStorage();
     }
-    
+
+    /*
     @Test
     public void testCreate() {
         String accountType = "CHECK";
@@ -51,4 +52,6 @@ public class AccountEntityFacadeTest {
         List<Account> res3 = accountEntityFacade.findByPerson(person3);
         Assert.assertEquals(2, res3.size());
     }
+
+     */
 }
