@@ -72,18 +72,18 @@ public class TransactionControllerTest {
 
     @Test
     public void testTransaction() {
-        ResponseEntity r =  accountsController.create("CHECK", "1", "SWEDBANK");
-        accountsController.create("CHECK", "2", "SWEDBANK");
-        transactionController.credit(1, 20);
-        transactionController.debit(1, 5);
-        transactionController.debit(2, 5);
+        ResponseEntity r =  accountsController.create("CHECK", "3", "SWEDBANK");
+        accountsController.create("CHECK", "5", "SWEDBANK");
+        transactionController.credit(3, 20);
+        transactionController.debit(3, 5);
+        transactionController.debit(5, 5);
 
-        ResponseEntity<?> res1 = transactionController.transactions(1);
+        ResponseEntity<?> res1 = transactionController.transactions(3);
         List l1 = (List) res1.getBody();
         assert l1 != null;
         Assert.assertEquals(2, l1.size());
 
-        ResponseEntity<?> res2 = transactionController.transactions(2);
+        ResponseEntity<?> res2 = transactionController.transactions(5);
         List l2 = (List) res2.getBody();
         assert l2 != null;
         Assert.assertEquals(1, l2.size());

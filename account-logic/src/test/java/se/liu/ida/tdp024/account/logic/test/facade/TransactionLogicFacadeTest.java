@@ -57,9 +57,35 @@ public class TransactionLogicFacadeTest {
 
         thrown.expect(AmountNegativeException.class);
         String res1 = transactionLogicFacade.debitAccount(id1, amount1);
+    }
+
+    @Test
+    public void testDebit2() throws PersonNotFoundException,
+            AccountServiceConfigurationException,
+            BankNotFoundException, AmountNegativeException,
+            AccountNotFoundException, AccountInsufficientHoldingsException {
+        accountLogicFacade.createAccount("CHECK", "1", "SWEDBANK");
+
+        long id1 = 1;
+        long id2 = 2;
+        int amount1 = -1;
+        int amount2 = 10;
 
         thrown.expect(AccountInsufficientHoldingsException.class);
         String res2 = transactionLogicFacade.debitAccount(id1, amount2);
+    }
+/*
+    @Test
+    public void testDebit3() throws PersonNotFoundException,
+            AccountServiceConfigurationException,
+            BankNotFoundException, AmountNegativeException,
+            AccountNotFoundException, AccountInsufficientHoldingsException {
+        accountLogicFacade.createAccount("CHECK", "1", "SWEDBANK");
+
+        long id1 = 1;
+        long id2 = 2;
+        int amount1 = -1;
+        int amount2 = 10;
 
         transactionLogicFacade.creditAccount(id1, amount2);
         String res3 = transactionLogicFacade.debitAccount(id1, amount2);
@@ -67,13 +93,25 @@ public class TransactionLogicFacadeTest {
 
         thrown.expect(AccountNotFoundException.class);
         String res4 = transactionLogicFacade.debitAccount(id2, amount2);
+    }
+
+    @Test
+    public void testDebit4() throws PersonNotFoundException,
+            AccountServiceConfigurationException,
+            BankNotFoundException, AmountNegativeException,
+            AccountNotFoundException, AccountInsufficientHoldingsException {
+        accountLogicFacade.createAccount("CHECK", "1", "SWEDBANK");
+
+        int amount2 = 10;
 
         thrown.expect(AccountNotFoundException.class);
         String res5 = transactionLogicFacade.debitAccount(10, amount2);
     }
 
+ */
+
     @Test
-    public void testCredit() throws PersonNotFoundException,
+    public void testCredit1() throws PersonNotFoundException,
             AccountServiceConfigurationException,
             BankNotFoundException,
             AmountNegativeException, AccountInsufficientHoldingsException, AccountNotFoundException {
@@ -84,18 +122,46 @@ public class TransactionLogicFacadeTest {
         int amount1 = -1;
         int amount2 = 10;
 
-        thrown.expect(AmountNegativeException.class);
-        String res1 = transactionLogicFacade.creditAccount(id1, amount1);
-
         String res2 = transactionLogicFacade.creditAccount(id1, amount2);
         Assert.assertEquals("OK", res2);
 
+        thrown.expect(AmountNegativeException.class);
+        String res1 = transactionLogicFacade.creditAccount(id1, amount1);
+    }
+/*
+    @Test
+    public void testCredit2() throws PersonNotFoundException,
+            AccountServiceConfigurationException,
+            BankNotFoundException,
+            AmountNegativeException, AccountInsufficientHoldingsException, AccountNotFoundException {
+        accountLogicFacade.createAccount("CHECK", "1", "SWEDBANK");
+
+        long id1 = 1;
+        long id2 = 2;
+        int amount1 = -1;
+        int amount2 = 10;
+
         thrown.expect(AccountNotFoundException.class);
         String res3 = transactionLogicFacade.debitAccount(id2, amount2);
+    }
+
+    @Test
+    public void testCredit3() throws PersonNotFoundException,
+            AccountServiceConfigurationException,
+            BankNotFoundException,
+            AmountNegativeException, AccountInsufficientHoldingsException, AccountNotFoundException {
+        accountLogicFacade.createAccount("CHECK", "1", "SWEDBANK");
+
+        long id1 = 1;
+        long id2 = 2;
+        int amount1 = -1;
+        int amount2 = 10;
 
         thrown.expect(AccountNotFoundException.class);
         String res4 = transactionLogicFacade.debitAccount(10, amount2);
     }
+
+ */
 
     @Test
     public void testTransactions() throws PersonNotFoundException,

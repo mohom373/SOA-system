@@ -91,8 +91,9 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
     @Override
     public String credit(long id, int amount) throws AmountNegativeException, AccountServiceConfigurationException {
         EntityManager em = EMF.getEntityManager();
-
+        System.out.println(amount);
         if (amount < 0) {
+            System.out.println("MOE");
             throw new AmountNegativeException("Amount is less than 0");
         }
         String type = "CREDIT";
@@ -100,11 +101,13 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         try {
             //kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
-
-            Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
-            if (account == null) {
+            Account account;
+            try {
+                account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
+            } catch(IllegalArgumentException e) {
                 throw new AccountNotFoundException("Account is null.");
             }
+
             int holdings = account.getHoldings();
 
             account.setHoldings((holdings+amount));
@@ -113,7 +116,6 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             em.merge(account);
             //kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
-            return "OK";
         } catch (LockTimeoutException | RollbackException | AccountNotFoundException e) {
             e.printStackTrace();
             if (em.getTransaction().isActive()) {
@@ -125,6 +127,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         } finally {
             em.close();
         }
+        return "OK";
     }
 
     @Override

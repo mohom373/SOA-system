@@ -57,10 +57,18 @@ public class AccountLogicFacadeTest {
         thrown.expect(PersonNotFoundException.class);
         String res4 = accountLogicFacade.createAccount(accountType1, person2, bank1);
 
+    }
+
+    @Test
+    public void testCreate2() throws PersonNotFoundException, AccountServiceConfigurationException, BankNotFoundException {
+        String accountType1 = "CHECK";
+        String person1 = "1";
+        String bank3 = "SEB";
+
         thrown.expect(BankNotFoundException.class);
         String res5 = accountLogicFacade.createAccount(accountType1, person1, bank3);
-
     }
+
     @Test
     public void testFind() throws PersonNotFoundException, AccountServiceConfigurationException, BankNotFoundException {
         accountLogicFacade.createAccount("CHECK", "1", "NORDEA");

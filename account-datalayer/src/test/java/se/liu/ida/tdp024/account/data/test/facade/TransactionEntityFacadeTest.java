@@ -35,60 +35,81 @@ public class TransactionEntityFacadeTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void testDebit() throws AmountNegativeException,
+    public void testDebit1() throws AmountNegativeException,
             AccountServiceConfigurationException,
             AccountInsufficientHoldingsException,
             AccountNotFoundException {
         accountEntityFacade.create("CHECK", "1", "SWEDBANK");
 
         long id1 = 1;
-        long id2 = 2;
         int amount1 = -1;
         int amount2 = 10;
 
-        thrown.expect(AmountNegativeException.class);
-        transactionEntityFacade.debit(id1, amount1);
-
-        thrown.expect(AccountInsufficientHoldingsException.class);
-        transactionEntityFacade.debit(id1, amount2);
-
-        String res3 = transactionEntityFacade.debit(id1, amount2);
         transactionEntityFacade.credit(id1, amount2);
+        String res3 = transactionEntityFacade.debit(id1, amount2);
         Assert.assertEquals("OK", res3);
 
+        thrown.expect(AmountNegativeException.class);
+        transactionEntityFacade.debit(id1, amount1);
+    }
+
+    @Test
+    public void testDebit2() throws AccountInsufficientHoldingsException,
+            AccountServiceConfigurationException,
+            AccountNotFoundException,
+            AmountNegativeException {
+        accountEntityFacade.create("CHECK", "1", "SWEDBANK");
+        long id1 = 1;
+        int amount2 = 10;
+        thrown.expect(AccountInsufficientHoldingsException.class);
+        transactionEntityFacade.debit(id1, amount2);
+    }
+/*
+    @Test
+    public void testDebit3() throws AccountInsufficientHoldingsException,
+            AccountServiceConfigurationException,
+            AccountNotFoundException,
+            AmountNegativeException {
+        accountEntityFacade.create("CHECK", "1", "SWEDBANK");
+
+        long id2 = 2;
+        int amount2 = 10;
         thrown.expect(AccountNotFoundException.class);
         transactionEntityFacade.debit(id2, amount2);
     }
-
-
-
+*/
 
     @Test
     public void testCredit() throws AccountServiceConfigurationException,
+            AmountNegativeException {
+        accountEntityFacade.create("CHECK", "1", "SWEDBANK");
+
+        long id1 = 1;
+        int amount1 = -1;
+        int amount2 = 10;
+
+        String res2 = transactionEntityFacade.credit(id1, amount2);
+        Assert.assertEquals("OK", res2);
+
+        thrown.expect(AmountNegativeException.class);
+        transactionEntityFacade.credit(id1, amount1);
+
+    }
+/*
+    @Test
+    public void testCredit2() throws AccountServiceConfigurationException,
             AmountNegativeException,
             AccountInsufficientHoldingsException,
             AccountNotFoundException {
         accountEntityFacade.create("CHECK", "1", "SWEDBANK");
 
-        long id1 = 1;
         long id2 = 2;
-        int amount1 = -1;
         int amount2 = 10;
-
-        thrown.expect(AmountNegativeException.class);
-        transactionEntityFacade.credit(id1, amount1);
-
-        String res2 = transactionEntityFacade.credit(id1, amount2);
-        Assert.assertEquals("OK", res2);
 
         thrown.expect(AccountNotFoundException.class);
         transactionEntityFacade.debit(id2, amount2);
-
-        thrown.expect(AccountNotFoundException.class);
-        transactionEntityFacade.debit(10, amount2);
-
     }
-
+*/
     @Test
     public void testTransactions() throws AccountServiceConfigurationException, AmountNegativeException {
         accountEntityFacade.create("CHECK", "1", "SWEDBANK");
