@@ -4,6 +4,8 @@ import hello.AccountsController;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import se.liu.ida.tdp024.account.data.api.entity.Account;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 
@@ -31,28 +33,29 @@ public class AccountsControllerTest {
         String bank2 = "NORDEA";
         String bank3 = "RANDOM";
 
-        /*
-        String res1 = accountsController.create(accountType1, person1, bank1);
-        Assert.assertEquals(res1, "OK");
 
-        String res2 = accountsController.create(accountType2, person1, bank1);
-        Assert.assertEquals(res2, "OK");
+        ResponseEntity<?> res1 = accountsController.create(accountType1, person1, bank1);
+        Assert.assertEquals(res1.getBody(), "OK");
 
-        String res3 = accountsController.create(accountType3, person1, bank1);
-        Assert.assertEquals(res3, "FAILED");
+        ResponseEntity<?> res2 = accountsController.create(accountType2, person1, bank1);
+        Assert.assertEquals(res2.getBody(), "OK");
 
-        String res4 = accountsController.create(accountType1, person2, bank2);
-        Assert.assertEquals(res4, "FAILED");
+        ResponseEntity<?> res3 = accountsController.create(accountType3, person1, bank1);
+        Assert.assertEquals(res3.getStatusCode(), HttpStatus.BAD_REQUEST);
 
-        String res5 = accountsController.create(accountType1, person1, bank3);
-        Assert.assertEquals(res5, "FAILED");
 
-        String res6 = accountsController.create(null, person1, bank3);
-        Assert.assertEquals(res6, "FAILED");
+        ResponseEntity<?> res4 = accountsController.create(accountType1, person2, bank2);
+        Assert.assertEquals(res4.getStatusCode(), HttpStatus.BAD_REQUEST);
 
-         */
+        ResponseEntity<?> res5 = accountsController.create(accountType1, person1, bank3);
+        Assert.assertEquals(res5.getStatusCode(), HttpStatus.BAD_REQUEST);
+
+        ResponseEntity<?> res6 = accountsController.create(null, person1, bank3);
+        Assert.assertEquals(res6.getStatusCode(), HttpStatus.BAD_REQUEST);
+
+
     }
-/*
+
     @Test
     public void testFind() {
         accountsController.create("CHECK", "1", "NORDEA");
@@ -63,15 +66,25 @@ public class AccountsControllerTest {
         String person2 = "2";
         String person3 = "3";
 
-        List<Account> res1 = accountsController.findPerson(person1);
-        Assert.assertEquals(1, res1.size());
+        ResponseEntity<?> res1 = accountsController.findPerson(person1);
+        List l = (List) res1.getBody();
+        assert l != null;
+        Assert.assertEquals(1, l.size());
 
-        List<Account> res2 = accountsController.findPerson(person2);
-        Assert.assertEquals(2, res2.size());
+        ResponseEntity<?> res2 = accountsController.findPerson(person2);
+        List l2 = (List) res2.getBody();
+        assert l2 != null;
+        Assert.assertEquals(2, l2.size());
 
-        List<Account> res3 = accountsController.findPerson(person3);
-        Assert.assertEquals(0, res3.size());
+        ResponseEntity<?> res3 = accountsController.findPerson(person3);
+        List l3 = (List) res3.getBody();
+        assert l3 != null;
+        Assert.assertEquals(0, l3.size());
+
+        ResponseEntity<?> res4 = accountsController.findPerson(null);
+        Assert.assertEquals(res4.getStatusCode(), HttpStatus.BAD_REQUEST);
+
     }
 
- */
+
 }

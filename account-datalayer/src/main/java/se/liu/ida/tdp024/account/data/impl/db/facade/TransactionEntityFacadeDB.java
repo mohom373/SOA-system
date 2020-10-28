@@ -10,7 +10,7 @@ import se.liu.ida.tdp024.account.data.api.facade.TransactionEntityFacade;
 import se.liu.ida.tdp024.account.data.impl.db.entity.AccountDB;
 import se.liu.ida.tdp024.account.data.impl.db.entity.TransactionDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
-import se.liu.ida.tdp024.account.logging.KafkaLogging;
+//import se.liu.ida.tdp024.account.logging.KafkaLogging;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -63,6 +63,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
                 throw new AccountNotFoundException("Account is null");
             }
             int holdings = account.getHoldings();
+
             if (holdings >= amount) {
                 account.setHoldings((holdings-amount));
                 status = "OK";
@@ -75,7 +76,6 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             //kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             if (status.equals("FAILED")) throw new AccountInsufficientHoldingsException("Not enough money in bank account.");
-            return status;
         } catch (RollbackException | LockTimeoutException | AccountNotFoundException e) {
             if (em.getTransaction().isActive()) {
                 //kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
@@ -85,6 +85,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         } finally {
             em.close();
         }
+        return status;
     }
 
     @Override
@@ -114,7 +115,7 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             em.getTransaction().commit();
             return "OK";
         } catch (LockTimeoutException | RollbackException | AccountNotFoundException e) {
-            System.out.println(e);
+            e.printStackTrace();
             if (em.getTransaction().isActive()) {
                 //kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();

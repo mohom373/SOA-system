@@ -4,7 +4,11 @@ import hello.AccountsController;
 import hello.TransactionController;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import se.liu.ida.tdp024.account.data.api.entity.Transaction;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 
@@ -21,7 +25,9 @@ public class TransactionControllerTest {
             storageFacade.emptyStorage();
     }
 
-    /*
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void testDebit() {
         accountsController.create("CHECK", "1", "SWEDBANK");
@@ -31,18 +37,18 @@ public class TransactionControllerTest {
         int amount1 = -1;
         int amount2 = 10;
 
-        String res1 = transactionController.debit(id1, amount1);
-        Assert.assertEquals("FAILED", res1);
+        ResponseEntity<?> res1 = transactionController.debit(id1, amount1);
+        Assert.assertEquals(res1.getStatusCode(), HttpStatus.BAD_REQUEST);
 
-        String res2 = transactionController.debit(id1, amount2);
-        Assert.assertEquals("FAILED", res2);
+        ResponseEntity<?> res2 = transactionController.debit(id1, amount2);
+        Assert.assertEquals(res2.getStatusCode(), HttpStatus.BAD_REQUEST);
 
         transactionController.credit(id1, amount2);
-        String res3 = transactionController.debit(id1, amount2);
-        Assert.assertEquals("OK", res3);
+        ResponseEntity<?> res3 = transactionController.debit(id1, amount2);
+        Assert.assertEquals("OK", res3.getBody());
 
-        String res4 = transactionController.debit(id2, amount2);
-        Assert.assertEquals("FAILED", res4);
+        ResponseEntity<?> res4 = transactionController.debit(id2, amount2);
+        Assert.assertEquals(res4.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -54,33 +60,39 @@ public class TransactionControllerTest {
         int amount1 = -1;
         int amount2 = 10;
 
-        String res1 = transactionController.credit(id1, amount1);
-        Assert.assertEquals("FAILED", res1);
+        ResponseEntity<?> res1 = transactionController.credit(id1, amount1);
+        Assert.assertEquals(res1.getStatusCode(), HttpStatus.BAD_REQUEST);
 
-        String res2 = transactionController.credit(id1, amount2);
-        Assert.assertEquals("OK", res2);
+        ResponseEntity<?> res2 = transactionController.credit(id1, amount2);
+        Assert.assertEquals("OK", res2.getBody());
 
-        String res3 = transactionController.debit(id2, amount2);
-        Assert.assertEquals("FAILED", res3);
+        ResponseEntity<?> res3 = transactionController.debit(id2, amount2);
+        Assert.assertEquals(res3.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void testTransaction() {
-        accountsController.create("CHECK", "4", "SWEDBANK");
-        accountsController.create("CHECK", "5", "SWEDBANK");
-        transactionController.credit(4, 20);
-        transactionController.debit(4, 5);
-        transactionController.debit(5, 5);
+        ResponseEntity r =  accountsController.create("CHECK", "1", "SWEDBANK");
+        accountsController.create("CHECK", "2", "SWEDBANK");
+        transactionController.credit(1, 20);
+        transactionController.debit(1, 5);
+        transactionController.debit(2, 5);
 
-        List<Transaction> res1 = transactionController.transactions(4);
-        Assert.assertEquals(2, res1.size());
+        ResponseEntity<?> res1 = transactionController.transactions(1);
+        List l1 = (List) res1.getBody();
+        assert l1 != null;
+        Assert.assertEquals(2, l1.size());
 
-        List<Transaction> res2 = transactionController.transactions(5);
-        Assert.assertEquals(1, res2.size());
+        ResponseEntity<?> res2 = transactionController.transactions(2);
+        List l2 = (List) res2.getBody();
+        assert l2 != null;
+        Assert.assertEquals(1, l2.size());
 
-        List<Transaction> res3 = transactionController.transactions(6);
-        Assert.assertEquals(0, res3.size());
+        ResponseEntity<?> res3 = transactionController.transactions(6);
+        List l3 = (List) res3.getBody();
+        assert l3 != null;
+        Assert.assertEquals(0, l3.size());
     }
 
-     */
+
 }

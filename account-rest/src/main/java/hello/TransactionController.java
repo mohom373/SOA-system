@@ -1,6 +1,7 @@
 package hello;
 
-import exceptions.InputParameterException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class TransactionController {
 
     public static final String ENDPOINT = "/account-rest";
 
-
+/*
     @RequestMapping(ENDPOINT + "/account/debit")
     public String debit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
         String ret;
@@ -38,6 +39,20 @@ public class TransactionController {
         return ret;
     }
 
+ */
+    @RequestMapping(ENDPOINT + "/account/debit")
+    public ResponseEntity<?> debit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
+        try {
+            transactionLogicFacade.debitAccount(id, amount);
+        }catch (AccountNotFoundException | AccountServiceConfigurationException | AccountInsufficientHoldingsException |
+                AmountNegativeException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+/*
     @RequestMapping(ENDPOINT + "/account/credit")
     public String credit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
         String ret;
@@ -50,6 +65,18 @@ public class TransactionController {
         return ret;
     }
 
+ */
+    @RequestMapping(ENDPOINT + "/account/credit")
+    public ResponseEntity<?> credit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
+        try {
+            transactionLogicFacade.creditAccount(id, amount);
+        }catch (AccountServiceConfigurationException | AmountNegativeException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+/*
     @RequestMapping(ENDPOINT + "/account/transactions")
     public List transactions(@RequestParam(value="id") long id ){
         List ret = new ArrayList();
@@ -61,5 +88,19 @@ public class TransactionController {
             return ret;
         }
         return ret;
+    }
+
+ */
+    @RequestMapping(ENDPOINT + "/account/transactions")
+    public ResponseEntity<?> transactions(@RequestParam(value="id") long id ){
+        List ret = new ArrayList();
+
+        try {
+            ret = transactionLogicFacade.getTransactions(id);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<List>(ret, HttpStatus.OK);
     }
 }

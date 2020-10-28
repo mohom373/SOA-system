@@ -22,9 +22,9 @@ public class AccountEntityFacadeTest {
         storageFacade.emptyStorage();
     }
 
-    /*
+
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         String accountType = "CHECK";
         String person = "1";
         String bank = "Nordea";
@@ -33,8 +33,9 @@ public class AccountEntityFacadeTest {
         Assert.assertEquals("OK", res);
     }
 
+
     @Test
-    public void testFind() {
+    public void testFind() throws Exception{
         accountEntityFacade.create("CHECK", "1", "SWEDBANK");
         accountEntityFacade.create("SAVINGS", "3", "NORDEA");
         accountEntityFacade.create("CHECK", "3", "SWEDBANK");
@@ -53,5 +54,5 @@ public class AccountEntityFacadeTest {
         Assert.assertEquals(2, res3.size());
     }
 
-     */
+
 }

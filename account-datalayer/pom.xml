@@ -39,12 +39,7 @@
             <groupId>tdp024</groupId>
             <artifactId>account-logging</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>5.0.8.RELEASE</version>
-            <scope>compile</scope>
+            <type>pom</type>
         </dependency>
     </dependencies>
     <properties>

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import exceptions.InputParameterException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,15 +26,16 @@ public class AccountsController {
 
     public static final String ENDPOINT = "/account-rest";
 
+    /*
     @RequestMapping(ENDPOINT + "/account/create")
     public String create(@RequestParam(value="accounttype", required = false) String accountType,
                             @RequestParam(value="person", required = false) String person,
                             @RequestParam(value="bank", required = false) String bank) throws InputParameterException {
         if (accountType == null || person == null || bank == null) {
-            throw new InputParameterException("None of the input parameters can be null.");
+            return new InputParameterException("None of the input parameters can be null.").toString();
         } else {
             if (!accountType.equalsIgnoreCase("Savings") && !accountType.equalsIgnoreCase("Check")){
-                throw new InputParameterException("Account type must either be savings or check.");
+                return new InputParameterException("Account type must either be savings or check.").toString();
             }
             String ret;
             try {
@@ -47,6 +50,32 @@ public class AccountsController {
 
     }
 
+     */
+    @RequestMapping(ENDPOINT + "/account/create")
+    public ResponseEntity<?> create(@RequestParam(value="accounttype", required = false) String accountType,
+                                 @RequestParam(value="person", required = false) String person,
+                                 @RequestParam(value="bank", required = false) String bank) {
+        if (accountType == null || person == null || bank == null) {
+            //return new InputParameterException("None of the input parameters can be null.").toString();
+            return new ResponseEntity<>(new InputParameterException("None of the input parameters can be null.").toString() + " " + HttpStatus.BAD_REQUEST , HttpStatus.BAD_REQUEST);
+        } else {
+            if (!accountType.equalsIgnoreCase("Savings") && !accountType.equalsIgnoreCase("Check")){
+                return new ResponseEntity<>(new InputParameterException("Account type must either be savings or check.").toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+            }
+            try {
+                accountLogicFacade.createAccount(accountType, person, bank);
+            } catch (PersonNotFoundException | BankNotFoundException | AccountServiceConfigurationException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        }
+
+    }
+
+
+    /*
 
     @RequestMapping(ENDPOINT + "/account/find/person")
     public List findPerson(@RequestParam(value="person", required = false) String person) throws InputParameterException {
@@ -62,5 +91,24 @@ public class AccountsController {
             return ret;
         }
         return ret;
+    }
+
+     */
+
+    @RequestMapping(ENDPOINT + "/account/find/person")
+    public ResponseEntity<?> findPerson(@RequestParam(value="person", required = false) String person) {
+        List ret = new ArrayList();
+
+        if (person == null) {
+            return new ResponseEntity<>(new InputParameterException("None of the input parameters can be null.").toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+        }
+        try {
+            ret = accountLogicFacade.findPerson(person);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new IllegalArgumentException().toString() + " " + HttpStatus.BAD_REQUEST , HttpStatus.BAD_REQUEST);
+
+        }
+        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 }

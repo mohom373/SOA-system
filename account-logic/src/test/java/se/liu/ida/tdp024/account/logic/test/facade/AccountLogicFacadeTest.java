@@ -2,12 +2,17 @@ package se.liu.ida.tdp024.account.logic.test.facade;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import se.liu.ida.tdp024.account.data.api.entity.Account;
+import se.liu.ida.tdp024.account.data.api.exceptions.AccountServiceConfigurationException;
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.api.util.StorageFacade;
 import se.liu.ida.tdp024.account.data.impl.db.facade.AccountEntityFacadeDB;
 import se.liu.ida.tdp024.account.logic.api.facade.AccountLogicFacade;
+import se.liu.ida.tdp024.account.logic.exceptions.BankNotFoundException;
+import se.liu.ida.tdp024.account.logic.exceptions.PersonNotFoundException;
 import se.liu.ida.tdp024.account.logic.impl.facade.AccountLogicFacadeImpl;
 
 import java.util.List;
@@ -29,39 +34,35 @@ public class AccountLogicFacadeTest {
         storageFacade.emptyStorage();
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
-    public void testCreate() {
+    public void testCreate() throws PersonNotFoundException, AccountServiceConfigurationException, BankNotFoundException {
 
         String accountType1 = "CHECK";
         String accountType2 = "SAVINGS";
-        String accountType3 = "RANDOM";
         String person1 = "1";
         String person2 = "10";
         String bank1 = "Nordea";
         String bank2 = "SWEDBANK";
         String bank3 = "SEB";
 
-        /*
         String res = accountLogicFacade.createAccount(accountType1, person1, bank1);
         Assert.assertEquals("OK", res);
 
         String res2 = accountLogicFacade.createAccount(accountType2, person1, bank2);
         Assert.assertEquals("OK", res2);
 
-        String res3 = accountLogicFacade.createAccount(accountType3, person1, bank1);
-        Assert.assertEquals("FAILED", res3);
-
+        thrown.expect(PersonNotFoundException.class);
         String res4 = accountLogicFacade.createAccount(accountType1, person2, bank1);
-        Assert.assertEquals("FAILED", res4);
 
+        thrown.expect(BankNotFoundException.class);
         String res5 = accountLogicFacade.createAccount(accountType1, person1, bank3);
-        Assert.assertEquals("FAILED", res5);
 
-         */
     }
-/*
     @Test
-    public void testFind() {
+    public void testFind() throws PersonNotFoundException, AccountServiceConfigurationException, BankNotFoundException {
         accountLogicFacade.createAccount("CHECK", "1", "NORDEA");
         accountLogicFacade.createAccount("CHECK", "2", "SWEDBANK");
         accountLogicFacade.createAccount("SAVINGS", "2", "NORDEA");
@@ -84,5 +85,4 @@ public class AccountLogicFacadeTest {
     }
 
 
- */
  }
