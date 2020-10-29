@@ -16,7 +16,7 @@ import java.util.List;
 public class AccountLogicFacadeImpl implements AccountLogicFacade {
     
     private AccountEntityFacade accountEntityFacade;
-    //private static final KafkaLogging kafkaLogging = new KafkaLogging();
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
     private static final HTTPHelper httpHelper = new HTTPHelperImpl();
     public static final String PERSONENDPOINT = "http://localhost:8060/";
     public static final String BANKENDPOINT = "http://localhost:8070/";

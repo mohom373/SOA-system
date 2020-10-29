@@ -1,8 +1,5 @@
 package se.liu.ida.tdp024.account.logic.http;
 
-import se.liu.ida.tdp024.account.logic.logger.AccountLogger;
-import se.liu.ida.tdp024.account.logic.logger.AccountLoggerImpl;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +11,6 @@ import java.net.URLEncoder;
 
 public class HTTPHelperImpl implements HTTPHelper {
 
-    private AccountLogger accountLogger = new AccountLoggerImpl();
 
     @Override
     public String get(String endpoint, String... parameters) {
@@ -36,7 +32,7 @@ public class HTTPHelperImpl implements HTTPHelper {
             }
             rd.close();
         } catch (Exception e) {
-            accountLogger.log(e);
+            e.printStackTrace();
         }
         return result;
 
@@ -116,7 +112,7 @@ public class HTTPHelperImpl implements HTTPHelper {
 
                 urlBuilder.append(parameterName).append("=").append(parameterValue);
             } catch (Exception e) {
-                accountLogger.log(e);
+                e.printStackTrace();
             }
 
         }

@@ -6,7 +6,7 @@ import se.liu.ida.tdp024.account.data.api.exceptions.AccountServiceConfiguration
 import se.liu.ida.tdp024.account.data.api.facade.AccountEntityFacade;
 import se.liu.ida.tdp024.account.data.impl.db.entity.AccountDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
-//import se.liu.ida.tdp024.account.logging.KafkaLogging;
+import se.liu.ida.tdp024.account.logging.KafkaLogging;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AccountEntityFacadeDB implements AccountEntityFacade {
 
-    //private static final KafkaLogging kafkaLogging = new KafkaLogging();
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
 
     @Override
     public String create(String accountType, String person, String bank) throws AccountServiceConfigurationException {

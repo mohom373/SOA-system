@@ -10,7 +10,7 @@ import se.liu.ida.tdp024.account.data.api.facade.TransactionEntityFacade;
 import se.liu.ida.tdp024.account.data.impl.db.entity.AccountDB;
 import se.liu.ida.tdp024.account.data.impl.db.entity.TransactionDB;
 import se.liu.ida.tdp024.account.data.impl.db.util.EMF;
-//import se.liu.ida.tdp024.account.logging.KafkaLogging;
+import se.liu.ida.tdp024.account.logging.KafkaLogging;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TransactionEntityFacadeDB implements TransactionEntityFacade {
 
-    //private static final KafkaLogging kafkaLogging = new KafkaLogging();
+    private static final KafkaLogging kafkaLogging = new KafkaLogging();
 
     @Override
     public void createTransaction(String type, int amount, Date created, String status, Account account, EntityManager em) {

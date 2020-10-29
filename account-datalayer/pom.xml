@@ -35,11 +35,25 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <!--
         <dependency>
             <groupId>tdp024</groupId>
             <artifactId>account-logging</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
+        </dependency>
+        -->
+        <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.13</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.6.0</version>
         </dependency>
     </dependencies>
     <properties>

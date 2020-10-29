@@ -74,7 +74,6 @@ public class TransactionLogicFacadeTest {
         thrown.expect(AccountInsufficientHoldingsException.class);
         String res2 = transactionLogicFacade.debitAccount(id1, amount2);
     }
-/*
     @Test
     public void testDebit3() throws PersonNotFoundException,
             AccountServiceConfigurationException,
@@ -108,7 +107,6 @@ public class TransactionLogicFacadeTest {
         String res5 = transactionLogicFacade.debitAccount(10, amount2);
     }
 
- */
 
     @Test
     public void testCredit1() throws PersonNotFoundException,
@@ -128,7 +126,6 @@ public class TransactionLogicFacadeTest {
         thrown.expect(AmountNegativeException.class);
         String res1 = transactionLogicFacade.creditAccount(id1, amount1);
     }
-/*
     @Test
     public void testCredit2() throws PersonNotFoundException,
             AccountServiceConfigurationException,
@@ -161,7 +158,6 @@ public class TransactionLogicFacadeTest {
         String res4 = transactionLogicFacade.debitAccount(10, amount2);
     }
 
- */
 
     @Test
     public void testTransactions() throws PersonNotFoundException,
