@@ -11,7 +11,7 @@ import java.util.List;
 public interface TransactionLogicFacade {
     public String debitAccount(long id, int amount) throws AccountNotFoundException, AccountServiceConfigurationException, AccountInsufficientHoldingsException, AmountNegativeException;
 
-    public String creditAccount(long id, int amount) throws AmountNegativeException, AccountServiceConfigurationException;
+    public String creditAccount(long id, int amount) throws AmountNegativeException, AccountServiceConfigurationException, AccountNotFoundException;
 
     public List getTransactions(long id);
 }

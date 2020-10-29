@@ -36,7 +36,8 @@ public class TransactionLogicFacadeImpl implements TransactionLogicFacade {
     @Override
     public String creditAccount(long id, int amount) throws
             AmountNegativeException,
-            AccountServiceConfigurationException {
+            AccountServiceConfigurationException,
+            AccountNotFoundException {
         String creditResponse;
         try {
             creditResponse = transactionEntityFacade.credit(id, amount);

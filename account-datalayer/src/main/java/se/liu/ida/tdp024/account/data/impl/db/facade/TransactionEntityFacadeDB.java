@@ -44,7 +44,6 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             AccountServiceConfigurationException,
             AccountInsufficientHoldingsException {
         EntityManager em = EMF.getEntityManager();
-
         if (amount < 0) {
             throw new AmountNegativeException("Amount is less than 0");
         }
@@ -56,44 +55,43 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             //kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
 
-
             Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
+
             if (account == null) {
-                // throw an exception
                 throw new AccountNotFoundException("Account is null");
             }
             int holdings = account.getHoldings();
-
             if (holdings >= amount) {
                 account.setHoldings((holdings-amount));
                 status = "OK";
             } else {
                 status = "FAILED";
             }
-
+            System.out.println(status);
             createTransaction(type, amount, created, status, account, em);
             em.merge(account);
             //kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             if (status.equals("FAILED")) throw new AccountInsufficientHoldingsException("Not enough money in bank account.");
-        } catch (RollbackException | LockTimeoutException | AccountNotFoundException e) {
+        } catch (RollbackException | LockTimeoutException e) {
+
+            throw new AccountServiceConfigurationException("Service configuration failed.");
+        } finally {
             if (em.getTransaction().isActive()) {
                 //kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
-            throw new AccountServiceConfigurationException("Service configuration failed.");
-        } finally {
             em.close();
         }
         return status;
     }
 
     @Override
-    public String credit(long id, int amount) throws AmountNegativeException, AccountServiceConfigurationException {
+    public String credit(long id, int amount) throws AmountNegativeException,
+            AccountServiceConfigurationException,
+            AccountNotFoundException {
         EntityManager em = EMF.getEntityManager();
-        System.out.println(amount);
         if (amount < 0) {
-            System.out.println("MOE");
             throw new AmountNegativeException("Amount is less than 0");
         }
         String type = "CREDIT";
@@ -101,11 +99,11 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
         try {
             //kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
-            Account account;
-            try {
-                account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
-            } catch(IllegalArgumentException e) {
-                throw new AccountNotFoundException("Account is null.");
+
+            Account account = em.find(AccountDB.class, id, LockModeType.PESSIMISTIC_WRITE);
+
+            if (account == null) {
+                throw new AccountNotFoundException("Account is null");
             }
 
             int holdings = account.getHoldings();
@@ -116,15 +114,15 @@ public class TransactionEntityFacadeDB implements TransactionEntityFacade {
             em.merge(account);
             //kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
-        } catch (LockTimeoutException | RollbackException | AccountNotFoundException e) {
+        } catch (LockTimeoutException | RollbackException e) {
             e.printStackTrace();
+            throw new AccountServiceConfigurationException("Service configuration failed.");
+
+        } finally {
             if (em.getTransaction().isActive()) {
                 //kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
-            throw new AccountServiceConfigurationException("Service configuration failed.");
-
-        } finally {
             em.close();
         }
         return "OK";

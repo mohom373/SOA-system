@@ -19,7 +19,10 @@ public interface TransactionEntityFacade {
             AccountNotFoundException,
             AccountServiceConfigurationException,
             AccountInsufficientHoldingsException;
-    public String credit(long id, int amount) throws AmountNegativeException, AccountServiceConfigurationException;
+    public String credit(long id, int amount) throws
+            AmountNegativeException,
+            AccountServiceConfigurationException,
+            AccountNotFoundException;
 
     public List getTransactions(long id);
 }

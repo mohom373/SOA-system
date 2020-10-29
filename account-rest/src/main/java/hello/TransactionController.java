@@ -70,7 +70,7 @@ public class TransactionController {
     public ResponseEntity<?> credit(@RequestParam(value="id") long id, @RequestParam(value="amount") int amount) {
         try {
             transactionLogicFacade.creditAccount(id, amount);
-        }catch (AccountServiceConfigurationException | AmountNegativeException e){
+        }catch (AccountServiceConfigurationException | AmountNegativeException | AccountNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
         }
