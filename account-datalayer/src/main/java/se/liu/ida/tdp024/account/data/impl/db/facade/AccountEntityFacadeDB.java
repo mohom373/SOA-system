@@ -21,7 +21,7 @@ public class AccountEntityFacadeDB implements AccountEntityFacade {
     public String create(String accountType, String person, String bank) throws AccountServiceConfigurationException {
         EntityManager em = EMF.getEntityManager();
         try {
-            //kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
+            kafkaLogging.sendToKafka("transaction-events", "Begin transaction");
             em.getTransaction().begin();
 
             Account acc = new AccountDB();
@@ -30,13 +30,13 @@ public class AccountEntityFacadeDB implements AccountEntityFacade {
             acc.setAccountType(accountType);
 
             em.persist(acc);
-            //kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
+            kafkaLogging.sendToKafka("transaction-events", "Commit transaction");
             em.getTransaction().commit();
             return "OK";
         } catch (RollbackException e) {
             e.printStackTrace();
             if (em.getTransaction().isActive()) {
-                //kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
+                kafkaLogging.sendToKafka("transaction-events", "Rollback transaction");
                 em.getTransaction().rollback();
             }
             throw new AccountServiceConfigurationException("Creating the Account failed due to service errors. Please contact your database administrator.");

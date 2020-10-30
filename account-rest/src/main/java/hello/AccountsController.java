@@ -26,37 +26,11 @@ public class AccountsController {
 
     public static final String ENDPOINT = "/account-rest";
 
-    /*
-    @RequestMapping(ENDPOINT + "/account/create")
-    public String create(@RequestParam(value="accounttype", required = false) String accountType,
-                            @RequestParam(value="person", required = false) String person,
-                            @RequestParam(value="bank", required = false) String bank) throws InputParameterException {
-        if (accountType == null || person == null || bank == null) {
-            return new InputParameterException("None of the input parameters can be null.").toString();
-        } else {
-            if (!accountType.equalsIgnoreCase("Savings") && !accountType.equalsIgnoreCase("Check")){
-                return new InputParameterException("Account type must either be savings or check.").toString();
-            }
-            String ret;
-            try {
-                ret = accountLogicFacade.createAccount(accountType, person, bank);
-            } catch (PersonNotFoundException | BankNotFoundException | AccountServiceConfigurationException e) {
-                e.printStackTrace();
-                return e.toString();
-            }
-
-            return ret;
-        }
-
-    }
-
-     */
     @RequestMapping(ENDPOINT + "/account/create")
     public ResponseEntity<?> create(@RequestParam(value="accounttype", required = false) String accountType,
                                  @RequestParam(value="person", required = false) String person,
                                  @RequestParam(value="bank", required = false) String bank) {
         if (accountType == null || person == null || bank == null) {
-            //return new InputParameterException("None of the input parameters can be null.").toString();
             return new ResponseEntity<>(new InputParameterException("None of the input parameters can be null.").toString() + " " + HttpStatus.BAD_REQUEST , HttpStatus.BAD_REQUEST);
         } else {
             if (!accountType.equalsIgnoreCase("Savings") && !accountType.equalsIgnoreCase("Check")){
@@ -64,36 +38,17 @@ public class AccountsController {
             }
             try {
                 accountLogicFacade.createAccount(accountType, person, bank);
-            } catch (PersonNotFoundException | BankNotFoundException | AccountServiceConfigurationException e) {
+            } catch (PersonNotFoundException | BankNotFoundException e) {
                 e.printStackTrace();
-                return new ResponseEntity<>(e.toString() + " " + HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(e.toString() + " " + HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND);
+            } catch (AccountServiceConfigurationException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(e.toString() + " " + HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
             return new ResponseEntity<>("OK", HttpStatus.OK);
         }
 
     }
-
-
-    /*
-
-    @RequestMapping(ENDPOINT + "/account/find/person")
-    public List findPerson(@RequestParam(value="person", required = false) String person) throws InputParameterException {
-        List ret = new ArrayList();
-
-        if (person == null) {
-            throw new InputParameterException("None of the input parameters can be null.");
-        }
-        try {
-            ret = accountLogicFacade.findPerson(person);
-        } catch (IllegalArgumentException e){
-            e.printStackTrace();
-            return ret;
-        }
-        return ret;
-    }
-
-     */
 
     @RequestMapping(ENDPOINT + "/account/find/person")
     public ResponseEntity<?> findPerson(@RequestParam(value="person", required = false) String person) {

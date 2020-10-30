@@ -45,10 +45,10 @@ public class AccountsControllerTest {
 
 
         ResponseEntity<?> res4 = accountsController.create(accountType1, person2, bank2);
-        Assert.assertEquals(res4.getStatusCode(), HttpStatus.BAD_REQUEST);
+        Assert.assertEquals(res4.getStatusCode(), HttpStatus.NOT_FOUND);
 
         ResponseEntity<?> res5 = accountsController.create(accountType1, person1, bank3);
-        Assert.assertEquals(res5.getStatusCode(), HttpStatus.BAD_REQUEST);
+        Assert.assertEquals(res5.getStatusCode(), HttpStatus.NOT_FOUND);
 
         ResponseEntity<?> res6 = accountsController.create(null, person1, bank3);
         Assert.assertEquals(res6.getStatusCode(), HttpStatus.BAD_REQUEST);

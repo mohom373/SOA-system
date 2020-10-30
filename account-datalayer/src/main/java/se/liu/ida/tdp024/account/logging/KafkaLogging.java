@@ -20,17 +20,14 @@ public class KafkaLogging {
         Producer<String, String> producer = new KafkaProducer<>(props, new StringSerializer(), new StringSerializer());
         producer.initTransactions();
         try{
-            System.out.println("try");
             producer.beginTransaction();
             producer.send(new ProducerRecord<>(channel, "Can't find", message));
         } catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {
             // We can't recover from these exceptions, so our only option is to close the producer and exit.
             ;
-            System.out.println("Catch");
             producer.close();
         } catch (final KafkaException e) {
             // For all other exceptions, just abort the transaction and try again.
-            System.out.println("Catch2");
             producer.abortTransaction();
         }
         producer.close();
